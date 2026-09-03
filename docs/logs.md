@@ -163,11 +163,38 @@ Changed:
 
 Result:
 
-* feature/explain has 6 commits, ready to push, waiting for codex review
+* feature/explain has 6 commits, merged to main via PR #6
 
 Next:
 
 * Serve API and UI polish, then benchmarks and Docker
+
+## 2026-09-03 - Serve
+
+Commands:
+
+* git checkout -b feature/serve from main
+* Added ghostforge/serve/schemas.py with pydantic models
+* Hardened ghostforge/serve/api.py with cors, validation, feedback store and sigma export
+* Added ghostforge/serve/ui_components.py with risk badge and stage bar
+* Polished ghostforge/serve/app.py with health check, hunt cards and export
+* Added tests/test_serve.py with 9 tests, pytest passed
+
+Installed:
+
+* fastapi, httpx for TestClient
+
+Changed:
+
+* Serve now has typed schemas, validated API, and polished UI with hunt plan
+
+Result:
+
+* feature/serve has 6 commits, merged to main
+
+Next:
+
+* Benchmarks and Docker
 
 ## How to add a new log
 
