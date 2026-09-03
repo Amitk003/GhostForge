@@ -7,7 +7,7 @@ from benchmarks.report import generate_report
 def test_confusion() -> None:
     tp, tn, fp, fn = confusion([1, 0, 1, 0], [1, 0, 0, 0])
     assert tp == 1
-    assert tn == 1
+    assert tn == 2
     assert fp == 0
     assert fn == 1
 
