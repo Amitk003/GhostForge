@@ -79,9 +79,6 @@ benchmarks/*.html
 .ipynb_checkpoints/
 notebooks/.ipynb_checkpoints/
 
-# Docker
-.dockerignore
-
 # Roadmap is private memory, keep local only
 ROADMAP.md
 roadmap.md
