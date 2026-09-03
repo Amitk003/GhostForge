@@ -110,11 +110,38 @@ Changed:
 
 Result:
 
-* feature/twin-core has 8 commits, ready to push, waiting for codex review
+* feature/twin-core has 9 commits with merge fix, merged to main via PR #4
 
 Next:
 
 * Forecast validator and explain branches
+
+## 2026-09-03 - Forecast Validator
+
+Commands:
+
+* git checkout -b feature/forecast-validator from main
+* Added .gitignore fix for ROADMAP.md private, git rm --cached ROADMAP.md kept local
+* Added ghostforge/validator/counterfactual.py with hunt actions and risk simulation
+* Added ghostforge/validator/conformal.py for calibrated intervals
+* Added ghostforge/twin/feedback.py for contestable store
+* Added tests/test_validator.py with 5 tests, pytest passed
+
+Installed:
+
+* numpy for conformal
+
+Changed:
+
+* Validator now has hunt counterfactual safe actions, conformal intervals, feedback store for active learning
+
+Result:
+
+* feature/forecast-validator has 7 commits, ready to push, waiting for codex review
+
+Next:
+
+* Explain and serve branches
 
 ## How to add a new log
 
