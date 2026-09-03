@@ -5,7 +5,6 @@ This is what makes lateral movement visible as graph movement.
 """
 
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
 
 import networkx as nx
 
@@ -18,11 +17,11 @@ class GraphSnapshot:
     graph: nx.DiGraph
     num_nodes: int
     num_edges: int
-    stats: Dict[str, float]
+    stats: dict[str, float]
 
 
 def build_graph(
-    flows: List[dict],
+    flows: list[dict],
     window_id: int = 0,
 ) -> GraphSnapshot:
     """Build directed graph from flow dicts.
@@ -55,8 +54,12 @@ def build_graph(
         # Edge dedup: sum if same edge repeats in window
         if g.has_edge(src, dst):
             prev = g[src][dst]
-            g[src][dst]["bytes"] = prev.get("bytes", 0) + int(f.get("bytes", f.get("totbytes", f.get("total_bytes", 0))) or 0)
-            g[src][dst]["packets"] = prev.get("packets", 0) + int(f.get("packets", f.get("totpkts", 0)) or 0)
+            g[src][dst]["bytes"] = prev.get("bytes", 0) + int(
+                f.get("bytes", f.get("totbytes", f.get("total_bytes", 0))) or 0
+            )
+            g[src][dst]["packets"] = prev.get("packets", 0) + int(
+                f.get("packets", f.get("totpkts", 0)) or 0
+            )
             # Keep max flags
             g[src][dst]["flags"] = max(prev.get("flags", 0), int(f.get("flags", 0) or 0))
         else:
@@ -99,7 +102,9 @@ def build_graph(
     )
 
 
-def build_graph_from_dataframe(df, window_id: int = 0, src_col: str = "src", dst_col: str = "dst") -> GraphSnapshot:
+def build_graph_from_dataframe(
+    df, window_id: int = 0, src_col: str = "src", dst_col: str = "dst"
+) -> GraphSnapshot:
     """Build graph directly from polars or pandas dataframe.
 
     Tries to find src and dst columns case insensitive.
@@ -130,7 +135,7 @@ def build_graph_from_dataframe(df, window_id: int = 0, src_col: str = "src", dst
     return build_graph(normalized_flows, window_id=window_id)
 
 
-def graph_to_tensors(snapshot: GraphSnapshot) -> Tuple[List[int], List[List[int]], List[float]]:
+def graph_to_tensors(snapshot: GraphSnapshot) -> tuple[list[int], list[list[int]], list[float]]:
     """Convert graph to tensors for model input.
 
     Returns node list, edge index, edge attrs.

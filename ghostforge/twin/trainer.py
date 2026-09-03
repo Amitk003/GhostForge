@@ -6,12 +6,10 @@ Uses EMA target encoder and early stopping on benign MSE.
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List
 
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from tqdm import tqdm
 
 from ghostforge.twin.codebook import SoftCodebook
 from ghostforge.twin.dataset import SnapshotSequenceDataset
@@ -60,8 +58,12 @@ class TwinTrainer:
         self.target_encoder.to(self.device)
         self.target_encoder.eval()
 
-        params = list(encoder.parameters()) + list(predictor.parameters()) + list(codebook.parameters())
-        self.optimizer = torch.optim.AdamW(params, lr=self.config.lr, weight_decay=self.config.weight_decay)
+        params = (
+            list(encoder.parameters()) + list(predictor.parameters()) + list(codebook.parameters())
+        )
+        self.optimizer = torch.optim.AdamW(
+            params, lr=self.config.lr, weight_decay=self.config.weight_decay
+        )
 
     @torch.no_grad()
     def update_target(self) -> None:
@@ -70,13 +72,19 @@ class TwinTrainer:
         for p_q, p_k in zip(self.encoder.parameters(), self.target_encoder.parameters()):
             p_k.data = decay * p_k.data + (1 - decay) * p_q.data
 
-    def train_epoch(self, loader: DataLoader) -> Dict[str, float]:
+    def train_epoch(self, loader: DataLoader) -> dict[str, float]:
         """Run one epoch over benign pairs."""
         self.encoder.train()
         self.predictor.train()
         self.codebook.train()
 
-        total_parts: Dict[str, List[float]] = {"pred": [], "ent": [], "sharp": [], "commit": [], "total": []}
+        total_parts: dict[str, list[float]] = {
+            "pred": [],
+            "ent": [],
+            "sharp": [],
+            "commit": [],
+            "total": [],
+        }
 
         for batch in loader:
             # Batch is SequenceItem list, handle collate manually
@@ -102,7 +110,9 @@ class TwinTrainer:
             loss, parts = total_jepa_loss(z_pred, z_target, probs, z_q)
 
             loss.backward()
-            nn.utils.clip_grad_norm_(list(self.encoder.parameters()) + list(self.predictor.parameters()), 1.0)
+            nn.utils.clip_grad_norm_(
+                list(self.encoder.parameters()) + list(self.predictor.parameters()), 1.0
+            )
             self.optimizer.step()
             self.update_target()
 
@@ -112,10 +122,12 @@ class TwinTrainer:
         # Mean
         return {k: sum(v) / max(len(v), 1) for k, v in total_parts.items()}
 
-    def train(self, dataset: SnapshotSequenceDataset, save_dir: Path | None = None) -> Dict[str, List[float]]:
+    def train(
+        self, dataset: SnapshotSequenceDataset, save_dir: Path | None = None
+    ) -> dict[str, list[float]]:
         """Full training loop with logging."""
         loader = DataLoader(dataset, batch_size=8, shuffle=True, collate_fn=lambda x: x)
-        history: Dict[str, List[float]] = {"pred": [], "total": [], "ent": []}
+        history: dict[str, list[float]] = {"pred": [], "total": [], "ent": []}
 
         for epoch in range(self.config.epochs):
             parts = self.train_epoch(loader)
@@ -124,7 +136,9 @@ class TwinTrainer:
                     history[k].append(parts[k])
 
             if (epoch + 1) % 5 == 0:
-                print(f"Epoch {epoch+1}/{self.config.epochs} - total {parts['total']:.4f} pred {parts['pred']:.4f} ent {parts['ent']:.4f}")
+                print(
+                    f"Epoch {epoch+1}/{self.config.epochs} - total {parts['total']:.4f} pred {parts['pred']:.4f} ent {parts['ent']:.4f}"
+                )
 
             if save_dir and (epoch + 1) % self.config.save_every == 0:
                 self.save(save_dir / f"checkpoint_epoch_{epoch+1}.pt")

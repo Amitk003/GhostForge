@@ -3,8 +3,6 @@
 Clear and typed models for request and response.
 """
 
-from typing import List, Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -34,7 +32,7 @@ class ForecastResponse(BaseModel):
     stage: str
     confidence: float = Field(ge=0, le=1)
     plausibility: float = Field(ge=0, le=1)
-    top_flows: List[FlowItem] = []
+    top_flows: list[FlowItem] = []
     mitre_technique: str = ""
     mitre_url: str = ""
     causal_path: str = ""

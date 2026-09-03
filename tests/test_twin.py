@@ -43,7 +43,15 @@ def test_stage_head() -> None:
     head = StageHead(latent_dim=16)
     z = torch.randn(16)
     stage, conf = head.predict(z)
-    assert stage in ["Benign", "Reconnaissance", "InitialAccess", "Discovery", "LateralMovement", "CommandAndControl", "Exfiltration"]
+    assert stage in [
+        "Benign",
+        "Reconnaissance",
+        "InitialAccess",
+        "Discovery",
+        "LateralMovement",
+        "CommandAndControl",
+        "Exfiltration",
+    ]
     assert 0 <= conf <= 1
 
 

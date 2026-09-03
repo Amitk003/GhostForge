@@ -4,8 +4,6 @@ Encodes G_t into latent z_t.
 Designed to be light for CPU and strong for temporal drift.
 """
 
-from typing import List
-
 import torch
 import torch.nn as nn
 
@@ -47,7 +45,7 @@ class GraphEncoder(nn.Module):
         z = x.mean(dim=0)  # [latent]
         return z
 
-    def encode_snapshot(self, edge_list: List[List[int]], edge_attrs: List[float]) -> torch.Tensor:
+    def encode_snapshot(self, edge_list: list[list[int]], edge_attrs: list[float]) -> torch.Tensor:
         """Helper to encode from raw lists."""
         if not edge_attrs:
             return torch.zeros(self.latent_dim)

@@ -23,14 +23,21 @@ def test_attention() -> None:
     assert len(weights) == 4
     assert abs(sum(weights) - 1.0) < 1e-5
 
-    flows = [{"src": "a", "dst": "b"}, {"src": "c", "dst": "d"}, {"src": "e", "dst": "f"}, {"src": "g", "dst": "h"}]
+    flows = [
+        {"src": "a", "dst": "b"},
+        {"src": "c", "dst": "d"},
+        {"src": "e", "dst": "f"},
+        {"src": "g", "dst": "h"},
+    ]
     top = attention_to_contrib(flows, weights)
     assert len(top) == 4
 
 
 def test_evidence_build() -> None:
     flows = [{"src": "10.0.0.1", "dst": "10.0.0.2", "port": 445, "flags": "SYN", "contrib": 0.5}]
-    ev = build_evidence(1, 0.7, "LateralMovement", flows, codebook_path=[12, 37], confidence=0.8, plausibility=1.0)
+    ev = build_evidence(
+        1, 0.7, "LateralMovement", flows, codebook_path=[12, 37], confidence=0.8, plausibility=1.0
+    )
     assert ev.stage == "LateralMovement"
     assert ev.mitre_technique != ""
     assert len(ev.top_flows) == 1

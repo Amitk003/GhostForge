@@ -41,8 +41,30 @@ def test_ttl_variance() -> None:
     from ghostforge.ingest.pcap_parser import PacketFeatures
 
     packets = [
-        PacketFeatures(timestamp=0, src="a", dst="b", src_port=1, dst_port=80, ttl=64, window_size=100, flags=2, payload_len=10, is_retransmit=False),
-        PacketFeatures(timestamp=1, src="a", dst="b", src_port=1, dst_port=80, ttl=64, window_size=100, flags=2, payload_len=10, is_retransmit=False),
+        PacketFeatures(
+            timestamp=0,
+            src="a",
+            dst="b",
+            src_port=1,
+            dst_port=80,
+            ttl=64,
+            window_size=100,
+            flags=2,
+            payload_len=10,
+            is_retransmit=False,
+        ),
+        PacketFeatures(
+            timestamp=1,
+            src="a",
+            dst="b",
+            src_port=1,
+            dst_port=80,
+            ttl=64,
+            window_size=100,
+            flags=2,
+            payload_len=10,
+            is_retransmit=False,
+        ),
     ]
     assert extract_ttl_variance(packets) == 0.0
 
@@ -51,7 +73,18 @@ def test_scan_signature() -> None:
     from ghostforge.ingest.pcap_parser import PacketFeatures
 
     packets = [
-        PacketFeatures(timestamp=i, src="a", dst="b", src_port=1, dst_port=80 + i, ttl=64, window_size=100, flags=2, payload_len=10, is_retransmit=False)
+        PacketFeatures(
+            timestamp=i,
+            src="a",
+            dst="b",
+            src_port=1,
+            dst_port=80 + i,
+            ttl=64,
+            window_size=100,
+            flags=2,
+            payload_len=10,
+            is_retransmit=False,
+        )
         for i in range(5)
     ]
     sig = extract_scan_signature(packets)

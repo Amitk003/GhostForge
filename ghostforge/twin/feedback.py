@@ -4,9 +4,8 @@ Analyst marks prediction as correct or wrong, we store for later fine tune.
 Simple parquet or csv append, offline.
 """
 
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import List
 
 import polars as pl
 
@@ -43,7 +42,7 @@ def save_feedback(feedback: Feedback, path: Path = Path("feedback.parquet")) -> 
         df.write_csv(path.with_suffix(".csv"))
 
 
-def load_feedback(path: Path = Path("feedback.parquet")) -> List[Feedback]:
+def load_feedback(path: Path = Path("feedback.parquet")) -> list[Feedback]:
     """Load all feedback."""
     if not path.exists():
         # Try csv fallback
@@ -60,9 +59,17 @@ def load_feedback(path: Path = Path("feedback.parquet")) -> List[Feedback]:
     except Exception:
         return []
 
-    out: List[Feedback] = []
+    out: list[Feedback] = []
     for row in df.to_dicts():
-        out.append(Feedback(window_id=int(row.get("window_id", 0)), label=str(row.get("label", "")), risk=row.get("risk"), stage=row.get("stage"), note=str(row.get("note", ""))))
+        out.append(
+            Feedback(
+                window_id=int(row.get("window_id", 0)),
+                label=str(row.get("label", "")),
+                risk=row.get("risk"),
+                stage=row.get("stage"),
+                note=str(row.get("note", "")),
+            )
+        )
     return out
 
 

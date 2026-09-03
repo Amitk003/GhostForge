@@ -1,14 +1,20 @@
 """Extended tests for new ingest parsers."""
 
-import polars as pl
 import tempfile
 from pathlib import Path
 
-from ghostforge.ingest.argus_parser import clean_argus, load_argus_csv
-from ghostforge.ingest.utils import hash_ip, normalize_columns
-from ghostforge.ingest.zeek_parser import zeek_to_flow_features
+import polars as pl
+
+from ghostforge.ingest.argus_parser import clean_argus
 from ghostforge.ingest.graph_builder import build_graph_from_dataframe
-from ghostforge.ingest.windowing import WindowConfig, build_windows, save_windows, windows_to_dataframes
+from ghostforge.ingest.utils import hash_ip, normalize_columns
+from ghostforge.ingest.windowing import (
+    WindowConfig,
+    build_windows,
+    save_windows,
+    windows_to_dataframes,
+)
+from ghostforge.ingest.zeek_parser import zeek_to_flow_features
 
 
 def test_normalize_columns() -> None:

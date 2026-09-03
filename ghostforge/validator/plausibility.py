@@ -3,14 +3,12 @@
 Dampens risk when predicted path violates MITRE prerequisites.
 """
 
-from typing import List
-
 from ghostforge.validator.mitre_map import MitreDAG
 
 
 def plausibility_score(
     predicted_stage: str,
-    seen_stages: List[str],
+    seen_stages: list[str],
     dag: MitreDAG | None = None,
 ) -> float:
     """Compute plausibility 0 to 1.

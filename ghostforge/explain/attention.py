@@ -4,8 +4,6 @@ Gives per edge weight that drove the latent drift.
 Works with simple mean pool now, will hook into GNN attention later.
 """
 
-from typing import Dict, List
-
 import torch
 import torch.nn.functional as F
 
@@ -13,7 +11,7 @@ import torch.nn.functional as F
 def edge_attention(
     edge_attrs: torch.Tensor,
     latent: torch.Tensor | None = None,
-) -> List[float]:
+) -> list[float]:
     """Compute attention weights for edges.
 
     For scaffold, use softmax over edge magnitude as proxy for attention.
@@ -37,10 +35,10 @@ def edge_attention(
 
 
 def top_edges(
-    flows: List[Dict],
-    weights: List[float],
+    flows: list[dict],
+    weights: list[float],
     k: int = 5,
-) -> List[Dict]:
+) -> list[dict]:
     """Pair flows with attention and return top k."""
     paired = list(zip(flows, weights))
     paired.sort(key=lambda x: x[1], reverse=True)
@@ -50,7 +48,7 @@ def top_edges(
     return out
 
 
-def attention_to_contrib(flows: List[Dict], weights: List[float]) -> List[Dict]:
+def attention_to_contrib(flows: list[dict], weights: list[float]) -> list[dict]:
     """Convert attention to contrib field expected by evidence builder."""
     top = top_edges(flows, weights, k=5)
     for f in top:

@@ -3,12 +3,10 @@
 Provides calibrated intervals for risk timeline, offline and simple.
 """
 
-from typing import List
-
 import numpy as np
 
 
-def calibrate(scores: List[float], alpha: float = 0.1) -> float:
+def calibrate(scores: list[float], alpha: float = 0.1) -> float:
     """Calibrate interval width from benign calibration scores.
 
     Uses quantile of absolute residuals. Returns width to add.
@@ -27,7 +25,7 @@ def interval(risk: float, width: float) -> tuple[float, float]:
     return low, high
 
 
-def coverage(risks: List[float], lows: List[float], highs: List[float]) -> float:
+def coverage(risks: list[float], lows: list[float], highs: list[float]) -> float:
     """Check empirical coverage, for testing."""
     if not risks:
         return 0.0

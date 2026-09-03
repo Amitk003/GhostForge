@@ -18,9 +18,15 @@ class JEPAPredictor(nn.Module):
         # One predictor per resolution
         self.predictors = nn.ModuleDict(
             {
-                "10s": nn.Sequential(nn.Linear(latent_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, latent_dim)),
-                "60s": nn.Sequential(nn.Linear(latent_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, latent_dim)),
-                "300s": nn.Sequential(nn.Linear(latent_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, latent_dim)),
+                "10s": nn.Sequential(
+                    nn.Linear(latent_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, latent_dim)
+                ),
+                "60s": nn.Sequential(
+                    nn.Linear(latent_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, latent_dim)
+                ),
+                "300s": nn.Sequential(
+                    nn.Linear(latent_dim, hidden_dim), nn.ReLU(), nn.Linear(hidden_dim, latent_dim)
+                ),
             }
         )
 

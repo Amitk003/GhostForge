@@ -5,7 +5,6 @@ All values have defaults and can be overridden by yaml or env.
 """
 
 from pathlib import Path
-from typing import Literal
 
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
@@ -17,7 +16,9 @@ class IngestConfig(BaseModel):
     window_seconds: int = Field(default=60, description="Snapshot window size")
     stride_seconds: int = Field(default=30, description="Window stride")
     max_hosts: int = Field(default=5000, description="Max hosts per window")
-    drop_ip_ports: bool = Field(default=True, description="Remove raw IPs and ports to avoid leakage")
+    drop_ip_ports: bool = Field(
+        default=True, description="Remove raw IPs and ports to avoid leakage"
+    )
     hash_role: bool = Field(default=True, description="Use role embedding instead of raw IP")
 
 
@@ -35,7 +36,9 @@ class TwinConfig(BaseModel):
 class ValidatorConfig(BaseModel):
     """Validator and MITRE settings."""
 
-    plausibility_threshold: float = Field(default=0.5, description="Min plausibility to keep forecast")
+    plausibility_threshold: float = Field(
+        default=0.5, description="Min plausibility to keep forecast"
+    )
     conformal_alpha: float = Field(default=0.1, description="Conformal coverage 1-alpha")
 
 

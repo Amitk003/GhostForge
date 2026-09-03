@@ -5,9 +5,8 @@ Offline, no cloud calls. Provides ingest and inference.
 
 import time
 from pathlib import Path
-from typing import List
 
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -19,7 +18,7 @@ from ghostforge.serve.schemas import (
     HealthResponse,
     MitreResponse,
 )
-from ghostforge.twin.feedback import save_feedback, Feedback
+from ghostforge.twin.feedback import Feedback, save_feedback
 
 app = FastAPI(
     title="GhostForge API",
@@ -50,12 +49,36 @@ def health() -> HealthResponse:
 def mitre_info(technique: str) -> MitreResponse:
     """Return MITRE technique info from bundled offline data."""
     known = {
-        "T1595": {"name": "Active Scanning", "tactic": "Reconnaissance", "url": "https://attack.mitre.org/techniques/T1595/"},
-        "T1021": {"name": "Remote Services", "tactic": "Lateral Movement", "url": "https://attack.mitre.org/techniques/T1021/"},
-        "T1071": {"name": "Application Layer Protocol", "tactic": "Command and Control", "url": "https://attack.mitre.org/techniques/T1071/"},
-        "T1041": {"name": "Exfiltration Over C2", "tactic": "Exfiltration", "url": "https://attack.mitre.org/techniques/T1041/"},
-        "T1190": {"name": "Exploit Public Facing Application", "tactic": "Initial Access", "url": "https://attack.mitre.org/techniques/T1190/"},
-        "T1083": {"name": "File and Directory Discovery", "tactic": "Discovery", "url": "https://attack.mitre.org/techniques/T1083/"},
+        "T1595": {
+            "name": "Active Scanning",
+            "tactic": "Reconnaissance",
+            "url": "https://attack.mitre.org/techniques/T1595/",
+        },
+        "T1021": {
+            "name": "Remote Services",
+            "tactic": "Lateral Movement",
+            "url": "https://attack.mitre.org/techniques/T1021/",
+        },
+        "T1071": {
+            "name": "Application Layer Protocol",
+            "tactic": "Command and Control",
+            "url": "https://attack.mitre.org/techniques/T1071/",
+        },
+        "T1041": {
+            "name": "Exfiltration Over C2",
+            "tactic": "Exfiltration",
+            "url": "https://attack.mitre.org/techniques/T1041/",
+        },
+        "T1190": {
+            "name": "Exploit Public Facing Application",
+            "tactic": "Initial Access",
+            "url": "https://attack.mitre.org/techniques/T1190/",
+        },
+        "T1083": {
+            "name": "File and Directory Discovery",
+            "tactic": "Discovery",
+            "url": "https://attack.mitre.org/techniques/T1083/",
+        },
     }
     data = known.get(technique, {"name": "Unknown", "tactic": "Unknown", "url": ""})
     return MitreResponse(**data)

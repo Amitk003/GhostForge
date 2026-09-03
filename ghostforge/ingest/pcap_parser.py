@@ -6,7 +6,6 @@ Uses Scapy when available, falls back to dpkt.
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List
 
 
 @dataclass
@@ -25,7 +24,7 @@ class PacketFeatures:
     is_retransmit: bool
 
 
-def parse_pcap(path: Path) -> List[PacketFeatures]:
+def parse_pcap(path: Path) -> list[PacketFeatures]:
     """Parse pcap file into packet features.
 
     This is a scaffold. Real implementation will use Scapy or dpkt.
@@ -38,7 +37,7 @@ def parse_pcap(path: Path) -> List[PacketFeatures]:
     return []
 
 
-def extract_ttl_variance(packets: List[PacketFeatures]) -> float:
+def extract_ttl_variance(packets: list[PacketFeatures]) -> float:
     """Compute TTL variance across packets in a window."""
     if not packets:
         return 0.0
@@ -50,7 +49,7 @@ def extract_ttl_variance(packets: List[PacketFeatures]) -> float:
     return statistics.variance(ttls)
 
 
-def extract_scan_signature(packets: List[PacketFeatures]) -> dict:
+def extract_scan_signature(packets: list[PacketFeatures]) -> dict:
     """Detect sequential or random port scan patterns."""
     if not packets:
         return {"scan_score": 0.0, "ports_touched": 0}
