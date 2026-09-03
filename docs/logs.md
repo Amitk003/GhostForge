@@ -83,12 +83,38 @@ Changed:
 
 Result:
 
-* feature/ingest branch has 12 commits, ready to push, waiting for codex review
+* feature/ingest branch has 12 commits, merged to main via PR #3
 
 Next:
 
 * Twin core multi scale JEPA improvements
 * Validator and forecast engine
+
+## 2026-09-03 - Twin Core
+
+Commands:
+
+* git checkout -b feature/twin-core from main
+* Added ghostforge/twin/losses.py, dataset.py, trainer.py with EMA, rollout.py with ensemble, anomaly.py with SVDD center
+* Updated twin __init__.py exports
+* Added tests/test_twin_core.py with 6 tests
+* pip install torch, pytest passed 6 tests
+
+Installed:
+
+* torch 2.2
+
+Changed:
+
+* Twin now has full training loop for benign only, checkpoint save, K step rollout with confidence cone, anomaly scorer
+
+Result:
+
+* feature/twin-core has 8 commits, ready to push, waiting for codex review
+
+Next:
+
+* Forecast validator and explain branches
 
 ## How to add a new log
 
