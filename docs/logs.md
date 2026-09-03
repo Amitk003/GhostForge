@@ -196,6 +196,35 @@ Next:
 
 * Benchmarks and Docker
 
+## 2026-09-03 - Bench
+
+Commands:
+
+* git checkout -b feature/bench from main
+* Added benchmarks/metrics.py with precision, recall, f1, fpr, auroc and lead time
+* Added benchmarks/report.py with json and markdown generator
+* Added scripts/benchmark.py with dummy run and ablation notes
+* Added .dockerignore, updated Dockerfile to copy benchmarks and tests and run pytest
+* Added .github/workflows/ci.yml for test and bench
+* Added tests/test_bench.py with 4 tests, pytest passed
+* Fixed benchmarks package import and ignore generated reports
+
+Installed:
+
+* numpy already present, no new deps
+
+Changed:
+
+* Bench now has honest metrics, report generation, benchmark runner, CI and Docker polish
+
+Result:
+
+* feature/bench has 9 commits, merged to main
+
+Next:
+
+* Final polish and handover
+
 ## How to add a new log
 
 Edit this file, add a new date section at the bottom, commit with message like `docs: update logs for 2026-09-04`.

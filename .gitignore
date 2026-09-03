@@ -74,13 +74,12 @@ dist-ui/
 logs/
 benchmarks/*.png
 benchmarks/*.html
+benchmarks/report.json
+benchmarks/report.md
 
 # Jupyter
 .ipynb_checkpoints/
 notebooks/.ipynb_checkpoints/
-
-# Docker
-.dockerignore
 
 # Roadmap is private memory, keep local only
 ROADMAP.md
