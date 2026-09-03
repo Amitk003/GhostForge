@@ -137,11 +137,37 @@ Changed:
 
 Result:
 
-* feature/forecast-validator has 7 commits, ready to push, waiting for codex review
+* feature/forecast-validator has 7 commits, merged to main via PR #5
 
 Next:
 
 * Explain and serve branches
+
+## 2026-09-03 - Explain
+
+Commands:
+
+* git checkout -b feature/explain from main
+* Added ghostforge/explain/attribution.py with baseline delta and top k
+* Added ghostforge/explain/attention.py with edge softmax
+* Enhanced ghostforge/explain/evidence.py with MITRE map, codebook path and markdown render
+* Added tests/test_explain.py with 3 tests, pytest passed
+
+Installed:
+
+* torch for attention
+
+Changed:
+
+* Explain now has feature attribution, edge attention, and full evidence chain with MITRE links
+
+Result:
+
+* feature/explain has 6 commits, ready to push, waiting for codex review
+
+Next:
+
+* Serve API and UI polish, then benchmarks and Docker
 
 ## How to add a new log
 
