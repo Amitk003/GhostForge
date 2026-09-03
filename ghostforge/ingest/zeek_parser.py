@@ -95,7 +95,7 @@ def zeek_to_flow_features(df: pl.DataFrame) -> pl.DataFrame:
     # Proto to int
     proto_map = {"tcp": 6, "udp": 17, "icmp": 1}
     if "proto" in df.columns:
-        df = df.with_columns(pl.col("proto").str.to_lowercase().replace(proto_map, default=0).alias("proto_num"))
+        df = df.with_columns(pl.col("proto").str.to_lowercase().replace_strict(proto_map, default=0).alias("proto_num"))
 
     # Derived
     if "orig_bytes" in df.columns and "resp_bytes" in df.columns:

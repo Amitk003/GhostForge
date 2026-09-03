@@ -73,7 +73,7 @@ def clean_argus(df: pl.DataFrame) -> pl.DataFrame:
     # Proto mapping
     if "proto" in df.columns:
         proto_map = {"tcp": 6, "udp": 17, "icmp": 1}
-        df = df.with_columns(pl.col("proto").str.to_lowercase().replace(proto_map, default=0).alias("proto_num"))
+        df = df.with_columns(pl.col("proto").str.to_lowercase().replace_strict(proto_map, default=0).alias("proto_num"))
 
     return df
 
