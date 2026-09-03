@@ -1,0 +1,80 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+.venv/
+venv/
+env/
+.env
+.conda/
+
+# Package
+*.log
+*.sqlite
+*.db
+pip-log.txt
+
+# Data - never commit raw pcaps or large datasets
+data/raw/
+data/processed/
+data/synthetic/
+*.pcap
+*.pcapng
+*.biargus
+*.csv.gz
+models/*.pt
+models/*.onnx
+models/*.bin
+*.parquet
+*.duckdb
+
+# Memory folder is private, not for GitHub
+memory/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+.tox/
+
+# Node if used for UI
+node_modules/
+.next/
+dist-ui/
+
+# Secrets
+.secrets/
+*.pem
+*.key
+.env.local
+
+# Logs
+logs/
+benchmarks/*.png
+benchmarks/*.html
+
+# Jupyter
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# Docker
+.dockerignore
