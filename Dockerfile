@@ -13,9 +13,12 @@ COPY pyproject.toml README.md LICENSE ./
 COPY ghostforge/ ghostforge/
 COPY configs/ configs/
 COPY scripts/ scripts/
+COPY benchmarks/ benchmarks/
+COPY tests/ tests/
 
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -e ".[dev]"
+    && pip install --no-cache-dir -e ".[dev]" \
+    && python -m pytest -o addopts="" -q
 
 EXPOSE 8000 8501
 
