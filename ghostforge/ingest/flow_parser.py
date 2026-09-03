@@ -88,9 +88,10 @@ def clean_dataframe(df: pl.DataFrame, drop_leakage: bool = True, hash_ips: bool 
 
     df = drop_redundant(df)
 
-    # Replace inf and large values
+    # Replace inf and large values for float cols only
     for col in df.columns:
-        if df[col].dtype.is_numeric():
+        dtype = df[col].dtype
+        if dtype in {pl.Float32, pl.Float64}:
             df = df.with_columns(pl.col(col).replace(float("inf"), None).replace(float("-inf"), None))
 
     # Fill nulls with median for numeric cols
