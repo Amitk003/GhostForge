@@ -1,0 +1,30 @@
+# GhostForge base config
+# All values can be overridden via env GHOSTFORGE__*
+
+project_name: ghostforge
+data_root: data
+models_root: models
+
+ingest:
+  window_seconds: 60
+  stride_seconds: 30
+  max_hosts: 5000
+  drop_ip_ports: true
+  hash_role: true
+
+twin:
+  latent_dim: 128
+  codebook_size: 64
+  resolutions: [10, 60, 300]
+  learning_rate: 0.0001
+  batch_size: 32
+  epochs: 50
+
+validator:
+  plausibility_threshold: 0.5
+  conformal_alpha: 0.1
+
+serve:
+  host: "0.0.0.0"
+  port_api: 8000
+  port_ui: 8501
