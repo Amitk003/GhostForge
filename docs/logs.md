@@ -137,11 +137,93 @@ Changed:
 
 Result:
 
-* feature/forecast-validator has 7 commits, ready to push, waiting for codex review
+* feature/forecast-validator has 7 commits, merged to main via PR #5
 
 Next:
 
 * Explain and serve branches
+
+## 2026-09-03 - Explain
+
+Commands:
+
+* git checkout -b feature/explain from main
+* Added ghostforge/explain/attribution.py with baseline delta and top k
+* Added ghostforge/explain/attention.py with edge softmax
+* Enhanced ghostforge/explain/evidence.py with MITRE map, codebook path and markdown render
+* Added tests/test_explain.py with 3 tests, pytest passed
+
+Installed:
+
+* torch for attention
+
+Changed:
+
+* Explain now has feature attribution, edge attention, and full evidence chain with MITRE links
+
+Result:
+
+* feature/explain has 6 commits, merged to main via PR #6
+
+Next:
+
+* Serve API and UI polish, then benchmarks and Docker
+
+## 2026-09-03 - Serve
+
+Commands:
+
+* git checkout -b feature/serve from main
+* Added ghostforge/serve/schemas.py with pydantic models
+* Hardened ghostforge/serve/api.py with cors, validation, feedback store and sigma export
+* Added ghostforge/serve/ui_components.py with risk badge and stage bar
+* Polished ghostforge/serve/app.py with health check, hunt cards and export
+* Added tests/test_serve.py with 9 tests, pytest passed
+
+Installed:
+
+* fastapi, httpx for TestClient
+
+Changed:
+
+* Serve now has typed schemas, validated API, and polished UI with hunt plan
+
+Result:
+
+* feature/serve has 6 commits, merged to main via PR #7
+
+Next:
+
+* Benchmarks and Docker
+
+## 2026-09-03 - Bench
+
+Commands:
+
+* git checkout -b feature/bench from main
+* Added benchmarks/metrics.py with precision, recall, f1, fpr, auroc and lead time
+* Added benchmarks/report.py with json and markdown generator
+* Added scripts/benchmark.py with dummy run and ablation notes
+* Added .dockerignore, updated Dockerfile to copy benchmarks and tests and run pytest
+* Added .github/workflows/ci.yml for test and bench
+* Added tests/test_bench.py with 4 tests, pytest passed
+* Fixed benchmarks package import and ignore generated reports
+
+Installed:
+
+* numpy already present, no new deps
+
+Changed:
+
+* Bench now has honest metrics, report generation, benchmark runner, CI and Docker polish
+
+Result:
+
+* feature/bench has 9 commits, ready to push, waiting for codex review
+
+Next:
+
+* Final polish and handover
 
 ## How to add a new log
 
