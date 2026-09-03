@@ -61,6 +61,53 @@ Next:
 * Create memory folder locally with idea, roadmap, memory.md, and detailed logs
 * Start ingest pipeline branch with real parsing logic
 
+## 2026-09-03 - Docs and Ingest
+
+Commands:
+
+* git checkout -b docs/guides, created 7 docs files, pushed to origin, PR #2 merged to main
+* Created memory folder locally with idea.md, roadmap.md, memory.md, logs, not pushed via .gitignore
+* git checkout -b feature/ingest from main, added utils, zeek_parser, argus_parser, improved flow, windowing, graph, audit script, extended tests, fixed polars
+* pip install polars networkx torch, pytest passed 12 ingest and 6 twin
+
+Installed:
+
+* polars, networkx, torch
+
+Changed:
+
+* Ingest now handles CIC, Zeek, Argus, graph dedup, windows
+
+Result:
+
+* feature/ingest pushed with 12 commits, waiting for review
+
+## 2026-09-03 - Twin Core
+
+Commands:
+
+* git checkout -b feature/twin-core from main
+* Added ghostforge/twin/losses.py, dataset.py, trainer.py with EMA, rollout.py with ensemble, anomaly.py with SVDD center
+* Updated twin __init__.py exports
+* Added tests/test_twin_core.py with 6 tests
+* pip install torch, pytest passed 6 tests
+
+Installed:
+
+* torch 2.2
+
+Changed:
+
+* Twin now has full training loop for benign only, checkpoint save, K step rollout with confidence cone, anomaly scorer
+
+Result:
+
+* feature/twin-core has 8 commits, ready to push, waiting for codex review
+
+Next:
+
+* Forecast validator and explain branches
+
 ## How to add a new log
 
 Edit this file, add a new date section at the bottom, commit with message like `docs: update logs for 2026-09-04`.
