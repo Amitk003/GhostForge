@@ -61,6 +61,35 @@ Next:
 * Create memory folder locally with idea, roadmap, memory.md, and detailed logs
 * Start ingest pipeline branch with real parsing logic
 
+## 2026-09-03 - Docs and Ingest
+
+Commands:
+
+* git checkout -b docs/guides, created 7 docs files, pushed to origin, PR #2 merged to main
+* Created memory folder locally with idea.md, roadmap.md, memory.md, logs, not pushed via .gitignore
+* git checkout -b feature/ingest from main
+* Added ghostforge/ingest/utils.py, zeek_parser.py, argus_parser.py, improved flow_parser, windowing, graph_builder
+* Added scripts/audit_datasets.py and tests/test_ingest_extended.py
+* pip install polars networkx pydantic typer rich pyyaml torch, ran pytest, fixed inf handling and replace_strict
+
+Installed:
+
+* polars, networkx, torch, pydantic, typer, rich
+
+Changed:
+
+* Ingest now handles CIC CSV with leakage strip and derived features, Zeek conn.log with gzip, Argus biargus with label unify, windowing with timestamp parse and save, graph builder with dedup and stats
+* All ingest tests now pass 12 passed, twin tests 6 passed
+
+Result:
+
+* feature/ingest branch has 12 commits, ready to push, waiting for codex review
+
+Next:
+
+* Twin core multi scale JEPA improvements
+* Validator and forecast engine
+
 ## How to add a new log
 
 Edit this file, add a new date section at the bottom, commit with message like `docs: update logs for 2026-09-04`.
