@@ -74,6 +74,8 @@ dist-ui/
 logs/
 benchmarks/*.png
 benchmarks/*.html
+benchmarks/report.json
+benchmarks/report.md
 
 # Jupyter
 .ipynb_checkpoints/

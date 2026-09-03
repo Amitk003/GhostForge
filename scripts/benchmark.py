@@ -9,6 +9,12 @@ from pathlib import Path
 import typer
 from rich.console import Console
 
+import sys
+from pathlib import Path
+
+# Ensure root is on path when run as script
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 from benchmarks.metrics import auroc, precision_recall_f1
 from benchmarks.report import generate_report, print_table, save_report
 
