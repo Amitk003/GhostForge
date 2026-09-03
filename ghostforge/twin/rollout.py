@@ -5,10 +5,8 @@ Uses ensemble and simple conformal calibration.
 """
 
 from dataclasses import dataclass
-from typing import List, Tuple
 
 import torch
-import torch.nn as nn
 
 from ghostforge.twin.codebook import SoftCodebook
 from ghostforge.twin.jepa import JEPAPredictor
@@ -43,7 +41,9 @@ class RolloutEngine:
         self.codebook = codebook
 
     @torch.no_grad()
-    def rollout(self, z_start: torch.Tensor, config: RolloutConfig | None = None) -> List[RolloutStep]:
+    def rollout(
+        self, z_start: torch.Tensor, config: RolloutConfig | None = None
+    ) -> list[RolloutStep]:
         """Roll out from z_start for K steps.
 
         Uses simple drift as risk: distance from start grows means higher risk.
@@ -52,7 +52,7 @@ class RolloutEngine:
         config = config or RolloutConfig()
         self.predictor.eval()
 
-        steps: List[RolloutStep] = []
+        steps: list[RolloutStep] = []
         z = z_start
 
         for k in range(1, config.steps + 1):
@@ -94,7 +94,7 @@ class RolloutEngine:
         }
 
 
-def conformal_calibrate(risks: List[float], alpha: float = 0.1) -> float:
+def conformal_calibrate(risks: list[float], alpha: float = 0.1) -> float:
     """Simple conformal interval width from calibration risks.
 
     Returns width to add to risk for coverage 1-alpha.

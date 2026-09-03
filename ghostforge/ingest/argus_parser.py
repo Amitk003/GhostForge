@@ -13,7 +13,6 @@ import polars as pl
 
 from ghostforge.ingest.utils import normalize_columns
 
-
 ARGUS_LABEL_COL = "label"
 
 
@@ -53,10 +52,7 @@ def clean_argus(df: pl.DataFrame) -> pl.DataFrame:
 
     if label_col:
         df = df.with_columns(
-            pl.col(label_col)
-            .str.to_lowercase()
-            .str.contains("botnet")
-            .alias("is_attack")
+            pl.col(label_col).str.to_lowercase().str.contains("botnet").alias("is_attack")
         )
         df = df.with_columns(
             pl.when(pl.col("is_attack"))
@@ -73,7 +69,12 @@ def clean_argus(df: pl.DataFrame) -> pl.DataFrame:
     # Proto mapping
     if "proto" in df.columns:
         proto_map = {"tcp": 6, "udp": 17, "icmp": 1}
-        df = df.with_columns(pl.col("proto").str.to_lowercase().replace_strict(proto_map, default=0).alias("proto_num"))
+        df = df.with_columns(
+            pl.col("proto")
+            .str.to_lowercase()
+            .replace_strict(proto_map, default=0)
+            .alias("proto_num")
+        )
 
     return df
 

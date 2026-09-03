@@ -6,12 +6,10 @@ Cleans leakage fields and normalizes features.
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List
 
 import polars as pl
 
 from ghostforge.ingest.utils import hash_ip, normalize_columns, safe_div
-
 
 # Leakage fields that must be removed before training
 LEAKAGE_FIELDS = {
@@ -79,7 +77,9 @@ def drop_redundant(df: pl.DataFrame) -> pl.DataFrame:
     return df
 
 
-def clean_dataframe(df: pl.DataFrame, drop_leakage: bool = True, hash_ips: bool = False) -> pl.DataFrame:
+def clean_dataframe(
+    df: pl.DataFrame, drop_leakage: bool = True, hash_ips: bool = False
+) -> pl.DataFrame:
     """Clean dataframe: remove leakage, handle inf and missing, optional IP hashing."""
     if drop_leakage:
         cols_to_drop = [c for c in df.columns if c.lower() in LEAKAGE_FIELDS]
@@ -92,7 +92,9 @@ def clean_dataframe(df: pl.DataFrame, drop_leakage: bool = True, hash_ips: bool 
     for col in df.columns:
         dtype = df[col].dtype
         if dtype in {pl.Float32, pl.Float64}:
-            df = df.with_columns(pl.col(col).replace(float("inf"), None).replace(float("-inf"), None))
+            df = df.with_columns(
+                pl.col(col).replace(float("inf"), None).replace(float("-inf"), None)
+            )
 
     # Fill nulls with median for numeric cols
     for col in df.columns:
@@ -112,7 +114,11 @@ def clean_dataframe(df: pl.DataFrame, drop_leakage: bool = True, hash_ips: bool 
     if hash_ips:
         for col in ["src_ip", "dst_ip"]:
             if col in df.columns:
-                df = df.with_columns(pl.col(col).cast(pl.Utf8).map_elements(lambda x: hash_ip(str(x)), return_dtype=pl.Utf8))
+                df = df.with_columns(
+                    pl.col(col)
+                    .cast(pl.Utf8)
+                    .map_elements(lambda x: hash_ip(str(x)), return_dtype=pl.Utf8)
+                )
 
     return df
 
@@ -120,15 +126,23 @@ def clean_dataframe(df: pl.DataFrame, drop_leakage: bool = True, hash_ips: bool 
 def add_derived_features(df: pl.DataFrame) -> pl.DataFrame:
     """Add derived features like bytes per packet and ratios."""
     if "totlen_fwd_pkts" in df.columns and "tot_fwd_pkts" in df.columns:
-        df = df.with_columns((pl.col("totlen_fwd_pkts") / pl.col("tot_fwd_pkts").clip(lower_bound=1)).alias("fwd_bpp"))
+        df = df.with_columns(
+            (pl.col("totlen_fwd_pkts") / pl.col("tot_fwd_pkts").clip(lower_bound=1)).alias(
+                "fwd_bpp"
+            )
+        )
     if "totlen_bwd_pkts" in df.columns and "tot_bwd_pkts" in df.columns:
-        df = df.with_columns((pl.col("totlen_bwd_pkts") / pl.col("tot_bwd_pkts").clip(lower_bound=1)).alias("bwd_bpp"))
+        df = df.with_columns(
+            (pl.col("totlen_bwd_pkts") / pl.col("tot_bwd_pkts").clip(lower_bound=1)).alias(
+                "bwd_bpp"
+            )
+        )
     if "flow_duration" in df.columns and "flow_packets_s" in df.columns:
         df = df.with_columns(safe_div(1, 1))
     return df
 
 
-def parse_flows(path: Path, label_col: str | None = None) -> tuple[pl.DataFrame, List[FlowRecord]]:
+def parse_flows(path: Path, label_col: str | None = None) -> tuple[pl.DataFrame, list[FlowRecord]]:
     """Parse flow file into cleaned dataframe and records.
 
     Returns both the cleaned DataFrame for training and a list of FlowRecord for graph use.
@@ -147,7 +161,7 @@ def parse_flows(path: Path, label_col: str | None = None) -> tuple[pl.DataFrame,
     df_clean = add_derived_features(df_clean)
 
     # Build records for graph path if IP cols were present before clean
-    records: List[FlowRecord] = []
+    records: list[FlowRecord] = []
     # Keep simple conversion from cleaned df if possible
     # Real mapping uses proto, duration, etc. We produce minimal records here
     return df_clean, records

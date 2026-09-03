@@ -1,6 +1,6 @@
 """Tests for bench metrics and report."""
 
-from benchmarks.metrics import auroc, confusion, lead_time_at_fpr, precision_recall_f1
+from benchmarks.metrics import auroc, confusion, precision_recall_f1
 from benchmarks.report import generate_report
 
 

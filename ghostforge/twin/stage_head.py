@@ -7,7 +7,6 @@ trained only on labeled windows, keeps dynamics benign only.
 import torch
 import torch.nn as nn
 
-
 STAGES = [
     "Benign",
     "Reconnaissance",

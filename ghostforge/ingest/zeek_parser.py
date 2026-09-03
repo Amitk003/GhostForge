@@ -8,12 +8,10 @@ Zeek logs are the production path for live tailing.
 
 import gzip
 from pathlib import Path
-from typing import List
 
 import polars as pl
 
 from ghostforge.ingest.utils import normalize_columns
-
 
 ZEEK_FIELDS = [
     "ts",
@@ -50,9 +48,9 @@ def read_zeek_log(path: Path) -> pl.DataFrame:
     # Read with polars, handle gz
     open_func = gzip.open if path.suffix == ".gz" else open
 
-    rows: List[dict] = []
+    rows: list[dict] = []
     with open_func(path, "rt", encoding="utf-8", errors="ignore") as f:
-        header: List[str] | None = None
+        header: list[str] | None = None
         for line in f:
             if line.startswith("#fields"):
                 header = line.strip().split("\t")[1:]
@@ -88,14 +86,33 @@ def zeek_to_flow_features(df: pl.DataFrame) -> pl.DataFrame:
         return df
 
     # Coerce numeric cols
-    for col in ["duration", "orig_bytes", "resp_bytes", "orig_pkts", "resp_pkts", "orig_ip_bytes", "resp_ip_bytes"]:
+    for col in [
+        "duration",
+        "orig_bytes",
+        "resp_bytes",
+        "orig_pkts",
+        "resp_pkts",
+        "orig_ip_bytes",
+        "resp_ip_bytes",
+    ]:
         if col in df.columns:
-            df = df.with_columns(pl.col(col).cast(pl.Utf8).str.replace("-", "0").cast(pl.Float64, strict=False).fill_null(0))
+            df = df.with_columns(
+                pl.col(col)
+                .cast(pl.Utf8)
+                .str.replace("-", "0")
+                .cast(pl.Float64, strict=False)
+                .fill_null(0)
+            )
 
     # Proto to int
     proto_map = {"tcp": 6, "udp": 17, "icmp": 1}
     if "proto" in df.columns:
-        df = df.with_columns(pl.col("proto").str.to_lowercase().replace_strict(proto_map, default=0).alias("proto_num"))
+        df = df.with_columns(
+            pl.col("proto")
+            .str.to_lowercase()
+            .replace_strict(proto_map, default=0)
+            .alias("proto_num")
+        )
 
     # Derived
     if "orig_bytes" in df.columns and "resp_bytes" in df.columns:

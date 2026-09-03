@@ -4,8 +4,8 @@ Four views: upload, graph playback, risk cone, evidence.
 Runs fully offline with error handling and hunt actions.
 """
 
-import streamlit as st
 import requests
+import streamlit as st
 
 from ghostforge.__version__ import __version__
 from ghostforge.serve.ui_components import hunt_card, risk_badge, stage_bar
@@ -35,14 +35,24 @@ if page == "Upload":
     uploaded = st.file_uploader("Choose file", type=["pcap", "pcapng", "csv", "log", "txt", "gz"])
     if uploaded:
         st.success(f"Received {uploaded.name} ({uploaded.size} bytes)")
-        st.info("Ingestion will run here and produce snapshots. See Graph and Risk tabs after processing.")
+        st.info(
+            "Ingestion will run here and produce snapshots. See Graph and Risk tabs after processing."
+        )
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Run Inference", type="primary"):
                 try:
                     st.write("Running twin inference...")
                     # Scaffold mock, real will call API
-                    st.json({"window_id": 0, "risk": 0.34, "stage": "Reconnaissance", "confidence": 0.78, "plausibility": 1.0})
+                    st.json(
+                        {
+                            "window_id": 0,
+                            "risk": 0.34,
+                            "stage": "Reconnaissance",
+                            "confidence": 0.78,
+                            "plausibility": 1.0,
+                        }
+                    )
                     st.success("Inference done")
                 except Exception as e:
                     st.error(f"Failed: {e}")
@@ -52,7 +62,9 @@ if page == "Upload":
 
 elif page == "Graph":
     st.header("Network Graph Playback")
-    st.write("Hosts are nodes, flows are edges. Lateral movement appears as new edges across hosts.")
+    st.write(
+        "Hosts are nodes, flows are edges. Lateral movement appears as new edges across hosts."
+    )
     w = st.slider("Time window", 0, 10, 0)
     st.caption(f"Showing window {w}")
     st.graphviz_chart(
@@ -69,10 +81,20 @@ elif page == "Graph":
 elif page == "Risk Timeline":
     st.header("Risk Forecast - Next 10 Windows")
     st.write("Risk timeline with confidence cone. Validated with MITRE prerequisites.")
-    chart_data = {"window": list(range(11)), "risk": [0.1, 0.12, 0.2, 0.34, 0.45, 0.6, 0.72, 0.71, 0.68, 0.6, 0.55]}
+    chart_data = {
+        "window": list(range(11)),
+        "risk": [0.1, 0.12, 0.2, 0.34, 0.45, 0.6, 0.72, 0.71, 0.68, 0.6, 0.55],
+    }
     st.line_chart(chart_data, x="window", y="risk")
     st.caption("Stage: Reconnaissance -> Discovery -> Lateral Movement predicted")
-    stages = ["Benign", "Reconnaissance", "Discovery", "LateralMovement", "CommandAndControl", "Exfiltration"]
+    stages = [
+        "Benign",
+        "Reconnaissance",
+        "Discovery",
+        "LateralMovement",
+        "CommandAndControl",
+        "Exfiltration",
+    ]
     stage_bar(stages, "LateralMovement")
     st.divider()
     st.subheader("Hunt Plan")
@@ -91,7 +113,9 @@ elif page == "Evidence":
             "contrib": [0.42, 0.31],
         }
     )
-    st.markdown("**MITRE:** T1021 Remote Services - [Details](https://attack.mitre.org/techniques/T1021/)")
+    st.markdown(
+        "**MITRE:** T1021 Remote Services - [Details](https://attack.mitre.org/techniques/T1021/)"
+    )
     st.markdown("**Causal path:** Regime 12 -> 37 -> 41 led to LateralMovement")
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -104,4 +128,7 @@ elif page == "Evidence":
         if st.button("Missing Context", key="missing"):
             st.info("Feedback recorded as missing context")
     if st.button("Export Sigma Rule"):
-        st.code("title: GhostForge LateralMovement\nlogsource:\n  category: network\ndetection:\n  selection:\n    technique: T1021\n  condition: selection\nlevel: high", language="yaml")
+        st.code(
+            "title: GhostForge LateralMovement\nlogsource:\n  category: network\ndetection:\n  selection:\n    technique: T1021\n  condition: selection\nlevel: high",
+            language="yaml",
+        )

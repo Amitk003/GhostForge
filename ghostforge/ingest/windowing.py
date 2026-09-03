@@ -7,7 +7,6 @@ Each snapshot is a state S_t used by world model.
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import List
 
 import polars as pl
 
@@ -53,7 +52,7 @@ def _parse_timestamp(df: pl.DataFrame, col: str) -> pl.DataFrame:
 def build_windows(
     df: pl.DataFrame,
     config: WindowConfig,
-) -> List[Window]:
+) -> list[Window]:
     """Split dataframe into time windows based on timestamp col.
 
     Args:
@@ -70,7 +69,9 @@ def build_windows(
             config.timestamp_col = candidates[0]
         else:
             # No timestamp, return single window
-            return [Window(window_id=0, start=datetime.utcnow(), end=datetime.utcnow(), rows=len(df))]
+            return [
+                Window(window_id=0, start=datetime.utcnow(), end=datetime.utcnow(), rows=len(df))
+            ]
 
     try:
         df = _parse_timestamp(df, config.timestamp_col)
@@ -95,10 +96,17 @@ def build_windows(
             raise ValueError("no time range")
     except Exception:
         # Fallback to single window with stats
-        return [Window(window_id=0, start=datetime.utcnow(), end=datetime.utcnow() + timedelta(seconds=config.window_seconds), rows=total)]
+        return [
+            Window(
+                window_id=0,
+                start=datetime.utcnow(),
+                end=datetime.utcnow() + timedelta(seconds=config.window_seconds),
+                rows=total,
+            )
+        ]
 
     # Build windows by time range, not just row count
-    windows: List[Window] = []
+    windows: list[Window] = []
     # Simple fixed count windows for now, handles small datasets offline
     # For large datasets, slide by stride_seconds using time filtering
     num_windows = max(1, (total // 1000) + 1)
@@ -120,19 +128,27 @@ def build_windows(
             Window(
                 window_id=i,
                 start=datetime.utcnow() + timedelta(seconds=i * config.stride_seconds),
-                end=datetime.utcnow() + timedelta(seconds=i * config.stride_seconds + config.window_seconds),
+                end=datetime.utcnow()
+                + timedelta(seconds=i * config.stride_seconds + config.window_seconds),
                 rows=rows,
                 features=stats,
             )
         )
 
     if not windows:
-        windows = [Window(window_id=0, start=datetime.utcnow(), end=datetime.utcnow() + timedelta(seconds=config.window_seconds), rows=total)]
+        windows = [
+            Window(
+                window_id=0,
+                start=datetime.utcnow(),
+                end=datetime.utcnow() + timedelta(seconds=config.window_seconds),
+                rows=total,
+            )
+        ]
 
     return windows
 
 
-def save_windows(windows: List[Window], out_dir: Path) -> None:
+def save_windows(windows: list[Window], out_dir: Path) -> None:
     """Save window metadata to parquet for reproducibility."""
     out_dir.mkdir(parents=True, exist_ok=True)
     data = [
@@ -157,12 +173,12 @@ def save_windows(windows: List[Window], out_dir: Path) -> None:
             writer.writerows(data)
 
 
-def windows_to_dataframes(df: pl.DataFrame, windows: List[Window]) -> List[pl.DataFrame]:
+def windows_to_dataframes(df: pl.DataFrame, windows: list[Window]) -> list[pl.DataFrame]:
     """Slice dataframe into per window dataframes using row chunks.
 
     Keeps ordering from build_windows.
     """
-    out: List[pl.DataFrame] = []
+    out: list[pl.DataFrame] = []
     offset = 0
     for w in windows:
         chunk = df.slice(offset, w.rows)

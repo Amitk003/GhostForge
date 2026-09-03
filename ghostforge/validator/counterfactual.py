@@ -5,7 +5,6 @@ how risk would change if that evidence is collected.
 """
 
 from dataclasses import dataclass
-from typing import Dict, List
 
 from ghostforge.validator.mitre_map import MitreDAG
 from ghostforge.validator.plausibility import plausibility_score
@@ -24,15 +23,43 @@ class HuntAction:
 
 
 # Safe hunt actions, no blocking
-HUNT_ACTIONS: List[HuntAction] = [
-    HuntAction(id="hunt_auth", title="Pull auth logs", target="host", cost="low", reduces_stage="LateralMovement", expected_drop=0.3),
-    HuntAction(id="hunt_dns", title="Check DNS queries", target="host", cost="low", reduces_stage="CommandAndControl", expected_drop=0.25),
-    HuntAction(id="hunt_payload", title="Capture payload sample", target="flow", cost="medium", reduces_stage="Exfiltration", expected_drop=0.4),
-    HuntAction(id="hunt_deceive", title="Enable honeypot on subnet", target="subnet", cost="low", reduces_stage="Discovery", expected_drop=0.2),
+HUNT_ACTIONS: list[HuntAction] = [
+    HuntAction(
+        id="hunt_auth",
+        title="Pull auth logs",
+        target="host",
+        cost="low",
+        reduces_stage="LateralMovement",
+        expected_drop=0.3,
+    ),
+    HuntAction(
+        id="hunt_dns",
+        title="Check DNS queries",
+        target="host",
+        cost="low",
+        reduces_stage="CommandAndControl",
+        expected_drop=0.25,
+    ),
+    HuntAction(
+        id="hunt_payload",
+        title="Capture payload sample",
+        target="flow",
+        cost="medium",
+        reduces_stage="Exfiltration",
+        expected_drop=0.4,
+    ),
+    HuntAction(
+        id="hunt_deceive",
+        title="Enable honeypot on subnet",
+        target="subnet",
+        cost="low",
+        reduces_stage="Discovery",
+        expected_drop=0.2,
+    ),
 ]
 
 
-def rank_hunts(predicted_stage: str, seen: List[str] | None = None) -> List[HuntAction]:
+def rank_hunts(predicted_stage: str, seen: list[str] | None = None) -> list[HuntAction]:
     """Rank hunt actions by relevance to predicted stage."""
     seen = seen or []
     scored = []
@@ -51,7 +78,7 @@ def rank_hunts(predicted_stage: str, seen: List[str] | None = None) -> List[Hunt
     return [h for _, h in scored]
 
 
-def simulate_hunt(risk: float, action: HuntAction, plausibility: float = 1.0) -> Dict[str, float]:
+def simulate_hunt(risk: float, action: HuntAction, plausibility: float = 1.0) -> dict[str, float]:
     """Simulate risk after hunt action.
 
     Simple model: risk * (1 - drop * plausibility)
@@ -61,7 +88,7 @@ def simulate_hunt(risk: float, action: HuntAction, plausibility: float = 1.0) ->
     return {"before": risk, "after": max(0.0, new_risk), "delta": delta, "action": action.id}
 
 
-def hunt_plan(risk: float, stage: str, seen: List[str] | None = None) -> List[Dict[str, float]]:
+def hunt_plan(risk: float, stage: str, seen: list[str] | None = None) -> list[dict[str, float]]:
     """Full hunt plan for current forecast."""
     seen = seen or []
     dag = MitreDAG()
@@ -70,5 +97,13 @@ def hunt_plan(risk: float, stage: str, seen: List[str] | None = None) -> List[Di
     plan = []
     for h in ranked[:3]:
         sim = simulate_hunt(risk, h, plaus)
-        plan.append({"title": h.title, "target": h.target, "before": sim["before"], "after": sim["after"], "delta": sim["delta"]})
+        plan.append(
+            {
+                "title": h.title,
+                "target": h.target,
+                "before": sim["before"],
+                "after": sim["after"],
+                "delta": sim["delta"],
+            }
+        )
     return plan

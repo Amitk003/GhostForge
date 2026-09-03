@@ -5,7 +5,6 @@ Top flows, codebook path, MITRE link.
 """
 
 from dataclasses import dataclass, field
-from typing import List
 
 
 @dataclass
@@ -28,8 +27,8 @@ class EvidenceChain:
     risk: float
     stage: str
     confidence: float
-    codebook_path: List[int] = field(default_factory=list)
-    top_flows: List[EvidenceFlow] = field(default_factory=list)
+    codebook_path: list[int] = field(default_factory=list)
+    top_flows: list[EvidenceFlow] = field(default_factory=list)
     mitre_technique: str = ""
     mitre_url: str = ""
     causal_path: str = ""
@@ -53,10 +52,19 @@ class EvidenceChain:
 MITRE_MAP = {
     "Benign": ("", ""),
     "Reconnaissance": ("T1595 Active Scanning", "https://attack.mitre.org/techniques/T1595/"),
-    "InitialAccess": ("T1190 Exploit Public Facing Application", "https://attack.mitre.org/techniques/T1190/"),
-    "Discovery": ("T1083 File and Directory Discovery", "https://attack.mitre.org/techniques/T1083/"),
+    "InitialAccess": (
+        "T1190 Exploit Public Facing Application",
+        "https://attack.mitre.org/techniques/T1190/",
+    ),
+    "Discovery": (
+        "T1083 File and Directory Discovery",
+        "https://attack.mitre.org/techniques/T1083/",
+    ),
     "LateralMovement": ("T1021 Remote Services", "https://attack.mitre.org/techniques/T1021/"),
-    "CommandAndControl": ("T1071 Application Layer Protocol", "https://attack.mitre.org/techniques/T1071/"),
+    "CommandAndControl": (
+        "T1071 Application Layer Protocol",
+        "https://attack.mitre.org/techniques/T1071/",
+    ),
     "Exfiltration": ("T1041 Exfiltration Over C2", "https://attack.mitre.org/techniques/T1041/"),
 }
 
@@ -65,8 +73,8 @@ def build_evidence(
     window_id: int,
     risk: float,
     stage: str,
-    top_flows_raw: List[dict],
-    codebook_path: List[int] | None = None,
+    top_flows_raw: list[dict],
+    codebook_path: list[int] | None = None,
     confidence: float = 0.0,
     plausibility: float = 1.0,
     causal_path: str | None = None,
@@ -117,5 +125,7 @@ def evidence_to_markdown(evidence: EvidenceChain) -> str:
         "Top flows:",
     ]
     for f in evidence.top_flows:
-        lines.append(f"- {f.src} -> {f.dst}:{f.port} flags={f.flags} contrib={f.contrib:.2f} reason={f.reason}")
+        lines.append(
+            f"- {f.src} -> {f.dst}:{f.port} flags={f.flags} contrib={f.contrib:.2f} reason={f.reason}"
+        )
     return "\n".join(lines)

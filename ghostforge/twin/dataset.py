@@ -6,7 +6,6 @@ Works with polars dataframes or precomputed latents.
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Tuple
 
 import torch
 from torch.utils.data import Dataset
@@ -30,7 +29,7 @@ class SnapshotSequenceDataset(Dataset):
     or load from parquet if available.
     """
 
-    def __init__(self, latents: List[torch.Tensor], window_ids: List[int] | None = None) -> None:
+    def __init__(self, latents: list[torch.Tensor], window_ids: list[int] | None = None) -> None:
         if len(latents) < 2:
             raise ValueError("Need at least 2 latents for sequence")
         self.latents = latents
@@ -49,7 +48,7 @@ class SnapshotSequenceDataset(Dataset):
     @classmethod
     def from_snapshots(
         cls,
-        snapshots: List[dict],
+        snapshots: list[dict],
         encoder: GraphEncoder | None = None,
     ) -> "SnapshotSequenceDataset":
         """Build from raw snapshot dicts with edge lists.
@@ -58,8 +57,8 @@ class SnapshotSequenceDataset(Dataset):
         For now we use dummy latents if encoder not ready.
         """
         encoder = encoder or GraphEncoder()
-        latents: List[torch.Tensor] = []
-        ids: List[int] = []
+        latents: list[torch.Tensor] = []
+        ids: list[int] = []
 
         for i, snap in enumerate(snapshots):
             edge_attrs = snap.get("edge_attrs", [])
@@ -75,7 +74,7 @@ class SnapshotSequenceDataset(Dataset):
         return cls(latents, ids)
 
 
-def load_latents_from_dir(path: Path) -> List[torch.Tensor]:
+def load_latents_from_dir(path: Path) -> list[torch.Tensor]:
     """Load precomputed latents from dir, if any. Returns empty if not found."""
     if not path.exists():
         return []

@@ -1,12 +1,13 @@
 """Tests for validator hunt and conformal."""
 
+import tempfile
+from pathlib import Path
+
+from ghostforge.twin.feedback import Feedback, load_feedback, needs_retrain, save_feedback
 from ghostforge.validator.conformal import calibrate, interval
 from ghostforge.validator.counterfactual import hunt_plan, rank_hunts
 from ghostforge.validator.mitre_map import MitreDAG
 from ghostforge.validator.plausibility import dampen_probability, plausibility_score
-from ghostforge.twin.feedback import Feedback, load_feedback, save_feedback, needs_retrain
-import tempfile
-from pathlib import Path
 
 
 def test_mitre_plausible() -> None:
