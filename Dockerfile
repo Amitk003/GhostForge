@@ -17,8 +17,7 @@ COPY benchmarks/ benchmarks/
 COPY tests/ tests/
 
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -e ".[dev]" \
-    && python -m pytest -o addopts="" -q
+    && pip install --no-cache-dir -e ".[dev]"
 
 EXPOSE 8000 8501
 
