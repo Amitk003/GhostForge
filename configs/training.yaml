@@ -1,0 +1,8 @@
+# Training specific overrides
+twin:
+  learning_rate: 0.0001
+  batch_size: 64
+  epochs: 100
+
+validator:
+  plausibility_threshold: 0.5

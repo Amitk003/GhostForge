@@ -1,0 +1,7 @@
+# Inference specific
+twin:
+  batch_size: 32
+
+validator:
+  plausibility_threshold: 0.4
+  conformal_alpha: 0.1

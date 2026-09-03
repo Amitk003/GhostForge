@@ -21,9 +21,12 @@ env/
 pip-log.txt
 
 # Data - never commit raw pcaps or large datasets
-data/raw/
-data/processed/
-data/synthetic/
+data/raw/*
+data/processed/*
+data/synthetic/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/synthetic/.gitkeep
 *.pcap
 *.pcapng
 *.biargus
